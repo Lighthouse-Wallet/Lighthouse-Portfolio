@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -18,7 +19,8 @@ app.config.from_envvar("APPLICATION_SETTINGS")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True
 app.secret_key = os.environ.get("JWT_SECRET_KEY")
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = os.environ.get("JWT_ACCESS_TOKEN_EXPIRES")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(days=10)
+app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(days=10)
 api = Api(app)
 jwt = JWTManager(app)
 

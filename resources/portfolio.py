@@ -17,20 +17,27 @@ class Portfolio(Resource):
     @classmethod
     @jwt_required()
     def get(cls, portfolio_name: str) -> "PortfolioModel":
-        # portfolio = PortfolioModel.find_by_id(portfolio_id)
         user_id = get_jwt_identity()
         portfolio = PortfolioModel.find_by_name(user_id, portfolio_name)
+        if not portfolio:
+            return {"message": gettext("portfolio_not_found").format(portfolio_name)}, 404
         return {"portfolio": portfolio_schema.dump(portfolio)}, 200
 
     @classmethod
     @jwt_required()
     def post(cls, portfolio_name: str) -> "PortfolioModel":
         user_id = get_jwt_identity()
-        if not PortfolioModel.find_by_name(user_id, portfolio_name):
-            return {"message": "Not"}
+        portfolio = portfolio_schema.load({"portfolio_name": portfolio_name, "user_id": user_id})
+        if PortfolioModel.find_by_name(user_id, portfolio_name):
+            return {"message": gettext("portfolio_exists").format(portfolio_name)}, 400
 
-        return {"message": "Success"}, 201
-
+        try:
+            portfolio.save_to_db()
+            return {"message": gettext("portfolio_created").format(portfolio_name), "data": portfolio_schema.dump(portfolio)}, 201
+        except:
+            traceback.print_exc()
+            portfolio.delete_from_db()
+            return {"message": gettext("portfolio_error_creating")}, 500
 
 
 class UserPortfolioList(Resource):

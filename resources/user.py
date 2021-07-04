@@ -60,7 +60,6 @@ class UserLogin(Resource):
     def post(cls):
         user_json = request.get_json()
         user_data = user_schema.load(user_json)
-
         user = UserModel.find_by_uuid(user_data.uuid)
 
         if user:

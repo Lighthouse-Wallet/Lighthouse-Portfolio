@@ -29,6 +29,11 @@
   "user_error_creating": "Internal server error. Failed to create user.",
   "user_registered": "Account created successfully.",
 
+  "portfolio_exists": "Portfolio with name '{}' already exists.",
+  "portfolio_created": "Portfolio with name '{}' created.",
+  "portfolio_not_found": "Portfolio with name '{}' not found.",
+  "portfolio_error_creating": "Internal server error. Failed to create portfolio.",
+
   "offer_not_found": "Offer not found.",
   "offer_created": "Offer created successfully.",
   "offer_deleted": "Offer deleted successfully.",

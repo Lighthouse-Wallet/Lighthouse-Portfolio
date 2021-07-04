@@ -14,6 +14,10 @@ class PortfolioModel(db.Model):
     def find_by_id(cls, _id: int) -> "PortfolioModel":
         return cls.query.filter_by(id=_id).first()
 
+    @classmethod
+    def find_by_name(cls, user_id: str, portfolio_name: str) -> "PortfolioModel":
+        return cls.query.filter_by({user_id, portfolio_name})
+
     def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()

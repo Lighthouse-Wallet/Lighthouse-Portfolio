@@ -24,14 +24,15 @@ class UserRegister(Resource):
 
         try:
             user.save_to_db()
-            return {"message": gettext("user_registered")}, 201
+            access_token = create_access_token(user.id, fresh=True)
+            return {"message": gettext("user_registered"), "access_token": access_token}, 201
         except:
             traceback.print_exc()
             user.delete_from_db()
             return {"message": gettext("user_error_creating")}, 500
 
 
-class User:
+class User(Resource):
     """
     Resource to be used for testing purposes only. Do not expose in routes.
     """

@@ -10,8 +10,6 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(), nullable=False, unique=True)
 
-    confirmation = db.relationship("PortfolioModel", lazy="dynamic", cascade="all, delete-orphan")
-
     @classmethod
     def find_by_uuid(cls, uuid: str) -> "UserModel":
         return cls.query.filter_by(uuid=uuid).first()

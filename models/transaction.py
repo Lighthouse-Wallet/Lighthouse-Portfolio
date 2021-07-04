@@ -10,11 +10,10 @@ class TransactionModel(db.Model):
     spot_price = db.Column(db.Float, nullable=False)
     exchange = db.Column(db.String(40), nullable=False)
     fiat = db.Column(db.String(40), nullable=False)
-    coin_id = db.Column(db.Integer, db.ForeignKey("coins.id"), nullable=False)
+    coin_id = db.Column(db.Integer, nullable=False)
     portfolio_id = db.Column(db.Integer, db.ForeignKey("portfolios.id"), nullable=False)
 
     portfolio = db.relationship("PortfolioModel")
-    coin = db.relationship("CoinModel", lazy="dynamic")
 
     @classmethod
     def find_by_id(cls, _id: int) -> "TransactionModel":
@@ -27,3 +26,4 @@ class TransactionModel(db.Model):
     def delete_from_db(self, _id: int) -> None:
         db.session.delete(self)
         db.session.commit()
+

@@ -11,6 +11,7 @@ from db import db
 from ma import ma
 from resources.user import UserRegister, User, UserLogin
 from resources.portfolio import Portfolio, UserPortfolioList
+# from resources.transaction import Transaction
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)

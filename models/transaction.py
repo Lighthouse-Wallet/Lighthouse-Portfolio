@@ -6,7 +6,7 @@ class TransactionModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     purchase_date = db.Column(db.DateTime, nullable=False)
-    coinAmount = db.Column(db.Float, nullable=False)
+    coin_amount = db.Column(db.Float, nullable=False)
     spot_price = db.Column(db.Float, nullable=False)
     exchange = db.Column(db.String(40), nullable=False)
     fiat = db.Column(db.String(40), nullable=False)

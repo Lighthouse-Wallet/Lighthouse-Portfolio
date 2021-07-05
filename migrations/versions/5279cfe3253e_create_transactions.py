@@ -21,7 +21,7 @@ def upgrade():
     op.create_table('transactions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('purchase_date', sa.DateTime(), nullable=False),
-    sa.Column('coinAmount', sa.Float(), nullable=False),
+    sa.Column('coin_amount', sa.Float(), nullable=False),
     sa.Column('spot_price', sa.Float(), nullable=False),
     sa.Column('exchange', sa.String(length=40), nullable=False),
     sa.Column('fiat', sa.String(length=40), nullable=False),

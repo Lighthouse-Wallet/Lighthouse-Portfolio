@@ -1,8 +1,8 @@
 """create-transactions
 
-Revision ID: 5279cfe3253e
+Revision ID: b16d092efa20
 Revises: 50121fc2e0bd
-Create Date: 2021-07-05 00:19:57.192169
+Create Date: 2021-07-06 00:03:52.499781
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5279cfe3253e'
+revision = 'b16d092efa20'
 down_revision = '50121fc2e0bd'
 branch_labels = None
 depends_on = None
@@ -27,7 +27,9 @@ def upgrade():
     sa.Column('fiat', sa.String(length=40), nullable=False),
     sa.Column('coin_id', sa.Integer(), nullable=False),
     sa.Column('portfolio_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['portfolio_id'], ['portfolios.id'], name=op.f('fk_transactions_portfolio_id_portfolios')),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_transactions_user_id_users')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_transactions'))
     )
     # ### end Alembic commands ###

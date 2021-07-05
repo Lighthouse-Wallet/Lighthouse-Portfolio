@@ -12,15 +12,16 @@ class TransactionModel(db.Model):
     fiat = db.Column(db.String(40), nullable=False)
     coin_id = db.Column(db.Integer, nullable=False)
     portfolio_id = db.Column(db.Integer, db.ForeignKey("portfolios.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     portfolio = db.relationship("PortfolioModel")
+    user = db.relationship("UserModel")
 
     @classmethod
-    def find_by_id(cls, _id: int) -> "TransactionModel":
-        return cls.query.filter_by(id=_id).first()
+    def find_by_filter(cls, _id: int, user_id: int) -> "TransactionModel":
+        return cls.query.filter_by(id=_id, user_id=user_id).first()
 
     def save_to_db(self) -> None:
-        print("HERE_________>", self)
         db.session.add(self)
         db.session.commit()
 

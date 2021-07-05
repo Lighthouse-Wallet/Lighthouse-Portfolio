@@ -20,7 +20,7 @@ class Transaction(Resource):
     @jwt_required()
     def get(cls, transaction_id: int) -> "TransactionModel":
         user_id = get_jwt_identity()
-        transaction = TransactionModel.find_by_id(user_id, transaction_id)
+        transaction = TransactionModel.find_by_filter(transaction_id, user_id)
         if not transaction:
             return {"message": gettext("transaction_not_found").format(transaction_id)}, 404
         return {"portfolio": transaction_schema.dump(transaction)}, 200
@@ -52,6 +52,7 @@ class CreateTransaction(Resource):
 
         new_date = str(datetime.fromtimestamp(transaction_json['purchase_date'] / 1000.0))
         transaction_json['purchase_date'] = new_date
+        transaction_json['user_id'] = user_id
 
         transaction = transaction_schema.load(transaction_json)
 

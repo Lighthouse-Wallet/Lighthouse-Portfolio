@@ -34,6 +34,11 @@
   "portfolio_not_found": "Portfolio with name '{}' not found.",
   "portfolio_error_creating": "Internal server error. Failed to create portfolio.",
 
+  "transaction_created": "Transaction created.",
+  "transaction_not_found": "Transaction with id '{}' not found.",
+  "transaction_error_creating": "Internal server error. Failed to create transaction.",
+  "transaction_unauthorized": "Transaction unauthorized. Failed to create transaction.",
+
   "offer_not_found": "Offer not found.",
   "offer_created": "Offer created successfully.",
   "offer_deleted": "Offer deleted successfully.",

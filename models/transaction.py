@@ -20,6 +20,7 @@ class TransactionModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     def save_to_db(self) -> None:
+        print("HERE_________>", self)
         db.session.add(self)
         db.session.commit()
 

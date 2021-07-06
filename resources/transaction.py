@@ -22,18 +22,36 @@ class Transaction(Resource):
         user_id = get_jwt_identity()
         transaction = TransactionModel.find_by_filter(transaction_id, user_id)
         if not transaction:
-            return {"message": gettext("transaction_not_found").format(transaction_id)}, 404
-        return {"portfolio": transaction_schema.dump(transaction)}, 200
+            return {"message": gettext("transaction_not_found").format(transaction_id)}, 400
+        return {"transaction": transaction_schema.dump(transaction)}, 200
 
     @classmethod
     @jwt_required()
     def put(cls, transaction_id: int):
-        return
+        user_id = get_jwt_identity()
+        transaction_json = request.get_json()
+        transaction = TransactionModel.find_by_filter(transaction_id, user_id)
+
+        if not transaction:
+            return {"message": gettext("transaction_not_found").format(transaction_id)}, 400
+        transaction = transaction_schema.load(transaction_json)
+
+        try:
+            transaction.save_to_db()
+        except:
+            return {"message": gettext("transaction_error_creating")}, 500
+
 
     @classmethod
     @jwt_required()
     def delete(cls, transaction_id: int):
-        return
+        user_id = get_jwt_identity()
+        transaction = TransactionModel.find_by_filter(transaction_id, user_id)
+
+        if transaction:
+            transaction.delete_from_db()
+            return {"message": gettext("transaction_deleted").format(transaction_id)}, 200
+        return {"message": gettext("transaction_not_found").format(transaction_id)}, 400
 
 
 class CreateTransaction(Resource):

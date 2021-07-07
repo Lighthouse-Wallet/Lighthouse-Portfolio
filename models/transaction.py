@@ -15,6 +15,9 @@ class TransactionModel(db.Model):
     portfolio_id = db.Column(db.Integer, db.ForeignKey("portfolios.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
     portfolio = db.relationship("PortfolioModel")
     user = db.relationship("UserModel")
 

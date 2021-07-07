@@ -25,9 +25,11 @@
   "portfolio_error_creating": "Internal server error. Failed to create portfolio.",
 
   "transaction_created": "Transaction created.",
+  "transaction_updated": "Transaction updated.",
   "transaction_not_found": "Transaction with id '{}' not found.",
   "transaction_error_creating": "Internal server error. Failed to create transaction.",
+  "transaction_error_updating": "Internal server error. Failed to update transaction.",
   "transaction_unauthorized": "Transaction unauthorized. Failed to create transaction.",
-  "transaction_deleted": "Transaction with id '{}' deleted.",
+  "transaction_deleted": "Transaction with id '{}' deleted."
 
 }

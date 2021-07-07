@@ -34,13 +34,19 @@ class Transaction(Resource):
 
         if not transaction:
             return {"message": gettext("transaction_not_found").format(transaction_id)}, 400
+
+        new_date = str(datetime.fromtimestamp(transaction_json['purchase_date'] / 1000.0))
+        transaction_json['purchase_date'] = new_date
+        transaction_json['user_id'] = user_id
+
         transaction = transaction_schema.load(transaction_json)
 
         try:
             transaction.save_to_db()
+            updated_transaction = transaction_schema.dump(transaction)
+            return {"message": gettext("transaction_updated"), "data": updated_transaction}, 201
         except:
-            return {"message": gettext("transaction_error_creating")}, 500
-
+            return {"message": gettext("transaction_error_updating")}, 500
 
     @classmethod
     @jwt_required()

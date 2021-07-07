@@ -25,6 +25,11 @@ class TransactionModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def update_to_db(self, data):
+        for k, v in data.items():
+            setattr(self, k, v)
+        db.session.commit()
+
     def delete_from_db(self, _id: int) -> None:
         db.session.delete(self)
         db.session.commit()

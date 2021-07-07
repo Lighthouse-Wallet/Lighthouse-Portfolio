@@ -39,13 +39,12 @@ class Transaction(Resource):
         transaction_json['purchase_date'] = new_date
         transaction_json['user_id'] = user_id
 
-        transaction = transaction_schema.load(transaction_json)
-
         try:
-            transaction.save_to_db()
+            transaction.update_to_db(transaction_json)
             updated_transaction = transaction_schema.dump(transaction)
-            return {"message": gettext("transaction_updated"), "data": updated_transaction}, 201
+            return {"message": gettext("transaction_updated"), "data": updated_transaction}, 200
         except:
+            traceback.print_exc()
             return {"message": gettext("transaction_error_updating")}, 500
 
     @classmethod
@@ -55,7 +54,7 @@ class Transaction(Resource):
         transaction = TransactionModel.find_by_filter(transaction_id, user_id)
 
         if transaction:
-            transaction.delete_from_db()
+            transaction.delete_from_db(transaction_id)
             return {"message": gettext("transaction_deleted").format(transaction_id)}, 200
         return {"message": gettext("transaction_not_found").format(transaction_id)}, 400
 

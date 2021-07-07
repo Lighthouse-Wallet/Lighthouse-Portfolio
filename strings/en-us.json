@@ -9,16 +9,6 @@
   "confirmation_resend_fail": "Internal server error. Failed to resend confirmation email.",
   "confirmation_resend_successful": "E-mail confirmation successfully re-sent.",
 
-  "item_name_exists": "An item with name '{}' already exists.",
-  "item_error_inserting": "An error occurred while inserting the item.",
-  "item_not_found": "Item not found.",
-  "item_deleted": "Item deleted.",
-
-  "store_name_exists": "A store with name '{}' already exists.",
-  "store_error_inserting": "An error occurred while inserting the store.",
-  "store_not_found": "Store not found.",
-  "store_deleted": "Store deleted.",
-
   "user_username_exists": "A user with that username already exists.",
   "user_uuid_exists": "A user with that uuid already exists.",
   "user_not_found": "User not found.",
@@ -34,9 +24,12 @@
   "portfolio_not_found": "Portfolio with name '{}' not found.",
   "portfolio_error_creating": "Internal server error. Failed to create portfolio.",
 
-  "offer_not_found": "Offer not found.",
-  "offer_created": "Offer created successfully.",
-  "offer_deleted": "Offer deleted successfully.",
-  "offer_error_creating": "Internal server error. Failed to create an offer.",
-  "offer_error_updating": "Internal server error. Failed to update an offer."
+  "transaction_created": "Transaction created.",
+  "transaction_updated": "Transaction updated.",
+  "transaction_not_found": "Transaction with id '{}' not found.",
+  "transaction_error_creating": "Internal server error. Failed to create transaction.",
+  "transaction_error_updating": "Internal server error. Failed to update transaction.",
+  "transaction_unauthorized": "Transaction unauthorized. Failed to create transaction.",
+  "transaction_deleted": "Transaction with id '{}' deleted."
+
 }

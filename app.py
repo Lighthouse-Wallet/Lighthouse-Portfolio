@@ -11,6 +11,7 @@ from db import db
 from ma import ma
 from resources.user import UserRegister, User, UserLogin
 from resources.portfolio import Portfolio, UserPortfolioList
+from resources.transaction import Transaction, CreateTransaction
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)
@@ -25,7 +26,6 @@ api = Api(app)
 jwt = JWTManager(app)
 
 migrate = Migrate(app, db)
-
 
 @app.before_first_request
 def create_tables():
@@ -42,8 +42,9 @@ api.add_resource(User, "/api/v1/user/<string:uuid>")  # for testing purposes
 api.add_resource(UserLogin, "/api/v1/login")
 # api.add_resource(UserPortfolioList, "/api/v1/portfolio/<int:user_id>")
 api.add_resource(Portfolio, "/api/v1/portfolio/<string:portfolio_name>")
+api.add_resource(CreateTransaction, "/api/v1/transaction-create")
+api.add_resource(Transaction, "/api/v1/transaction/<int:transaction_id>")
 
-db.init_app(app)
 if __name__ == "__main__":
     db.init_app(app)
     ma.init_app(app)

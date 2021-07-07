@@ -9,6 +9,7 @@ class PortfolioModel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     user = db.relationship("UserModel")
+    transactions = db.relationship('TransactionModel', lazy='dynamic')
 
     @classmethod
     def find_by_id(cls, _id: int) -> "PortfolioModel":

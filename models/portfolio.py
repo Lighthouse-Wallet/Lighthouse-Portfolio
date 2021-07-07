@@ -1,10 +1,11 @@
 from db import db
-
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 class PortfolioModel(db.Model):
     __tablename__ = "portfolios"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
     portfolio_name = db.Column(db.String(80), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 

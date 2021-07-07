@@ -1,10 +1,11 @@
 from db import db
-
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 class TransactionModel(db.Model):
     __tablename__ = "transactions"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
     purchase_date = db.Column(db.DateTime, nullable=False)
     coin_amount = db.Column(db.Float, nullable=False)
     spot_price = db.Column(db.Float, nullable=False)

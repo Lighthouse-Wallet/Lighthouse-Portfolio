@@ -1,5 +1,5 @@
-from requests import Response
-from flask import request, url_for
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 from db import db
 
@@ -7,12 +7,12 @@ from db import db
 class UserModel(db.Model):
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(), nullable=False, unique=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    device_id = db.Column(db.String(), nullable=False, unique=True)
 
     @classmethod
-    def find_by_uuid(cls, uuid: str) -> "UserModel":
-        return cls.query.filter_by(uuid=uuid).first()
+    def find_by_device_id(cls, value: str) -> "UserModel":
+        return cls.query.filter_by(device_id=value).first()
 
     def save_to_db(self) -> None:
         db.session.add(self)

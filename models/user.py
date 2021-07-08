@@ -7,7 +7,7 @@ from db import db
 class UserModel(db.Model):
     __tablename__ = "users"
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     device_id = db.Column(db.String(), nullable=False, unique=True)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())

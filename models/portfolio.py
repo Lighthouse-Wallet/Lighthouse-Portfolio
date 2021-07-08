@@ -5,9 +5,9 @@ import uuid
 class PortfolioModel(db.Model):
     __tablename__ = "portfolios"
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     portfolio_name = db.Column(db.String(80), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("users.id"), nullable=False)
 
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())

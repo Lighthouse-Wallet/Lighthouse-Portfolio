@@ -19,7 +19,7 @@ class UserRegister(Resource):
         user_json = request.get_json()
         user = user_schema.load(user_json)
 
-        if UserModel.find_by_uuid(user.uuid):
+        if UserModel.find_by_device_id(user.device_id):
             return {"message": gettext("user_uuid_exists")}, 400
 
         try:
@@ -30,29 +30,6 @@ class UserRegister(Resource):
             traceback.print_exc()
             user.delete_from_db()
             return {"message": gettext("user_error_creating")}, 500
-
-
-class User(Resource):
-    """
-    Resource to be used for testing purposes only. Do not expose in routes.
-    """
-
-    @classmethod
-    def get(cls, uuid: str):
-        user = UserModel.find_by_uuid(uuid=uuid)
-        if not user:
-            return {"message": gettext("user_not_found")}, 404
-
-        return user_schema.dump(user), 200
-
-    @classmethod
-    def delete(cls, uuid: str):
-        user = UserModel.find_by_uuid(uuid=uuid)
-        if not user:
-            return {"message": gettext("user_not_found")}, 404
-
-        user.delete_from_db()
-        return {"message": gettext("user_deleted")}, 200
 
 
 class UserLogin(Resource):
@@ -75,3 +52,4 @@ class UserLogout(Resource):
     def post(cls):
         user_id = get_jwt_identity()
         return {"message": gettext("user_logged_out").format(user_id)}, 200
+

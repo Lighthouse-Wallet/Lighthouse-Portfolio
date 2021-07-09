@@ -156,17 +156,20 @@
         }
       ],
       "get": {
-         "tags": [
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "tags": [
           "Portfolio Request"
         ],
         "summary": "Fetch portfolio and associated transactions",
-         "responses": {
+        "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/portfolioResponse"
+                  "$ref": "#/definitions/getPortfolioResponse"
                 }
               }
             }
@@ -190,17 +193,86 @@
         }
       },
       "post": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
         "tags": [
           "Portfolio Request"
         ],
         "summary": "Create a portfolio",
-         "responses": {
+        "responses": {
           "201": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/portfolioResponse"
+                  "$ref": "#/definitions/createPortfolioResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction unauthorized. Failed to create transaction."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to create transaction."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction-create": {
+      "post": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Create a transaction",
+        "tags": [
+          "Transaction Request"
+        ],
+        "requestBody": {
+          "description": "Transaction request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/createPortfolioResponse"
                 }
               }
             }
@@ -240,14 +312,6 @@
         }
       }
     },
-    "/transaction-create": {
-      "post": {
-        "summary": "Create a transaction",
-        "tags": [
-          "Transaction Request"
-        ]
-      }
-    },
     "/transaction/{transaction_id}": {
       "parameters": [
         {
@@ -261,6 +325,9 @@
         }
       ],
       "put": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
         "summary": "Edit a transaction by ID",
         "tags": [
           "Transaction Request"
@@ -298,6 +365,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "userRequestBody": {
         "type": "object",
@@ -323,28 +397,35 @@
         "properties": {
           "purchase_date": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": 1625488612933
           },
           "coin_amount": {
             "type": "number",
-            "format": "float"
+            "format": "float",
+            "example": 0.33
           },
           "spot_price": {
             "type": "number",
-            "format": "float"
+            "format": "float",
+            "example": 22000.00
           },
           "exchange": {
-            "type": "string"
+            "type": "string",
+            "example": "Global"
           },
           "fiat": {
-            "type": "string"
+            "type": "string",
+            "example": "USD"
           },
           "coin_id": {
-            "type": "number"
+            "type": "number",
+            "example": 1
           },
           "portfolio_id": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "example": "4cccb394-7c9f-4819-b6c7-5d363a6afc05"
           }
         }
       }
@@ -364,7 +445,7 @@
         }
       }
     },
-    "portfolioResponse": {
+    "createPortfolioResponse": {
       "type": "object",
       "properties": {
         "message": {
@@ -405,7 +486,18 @@
             }
           }
         }
-
+      }
+    },
+    "createTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Transaction created."
+        },
+        "data": {
+          "$ref": "#/definitions/getTransactionResponse"
+        }
       }
     },
     "getPortfolioResponse": {
@@ -431,9 +523,8 @@
             "transactions": {
               "type": "array",
               "items": {
-                  "$ref": "#/definitions/transactionResponse"
-              },
-              "example": "[]"
+                "$ref": "#/definitions/getTransactionResponse"
+              }
             },
             "created_on": {
               "type": "string",
@@ -450,43 +541,58 @@
       }
     },
     "getTransactionResponse": {
-       "type": "object",
+      "type": "object",
       "properties": {
-        "portfolio": {
-          "type": "object",
-          "properties": {
-            "user_id": {
-              "type": "string",
-              "format": "uuid",
-              "example": "abef8668-2944-466b-8753-3fb6e145bbe2"
-            },
-            "id": {
-              "type": "string",
-              "format": "uuid",
-              "example": "220fe614-3938-43a7-a524-9db709b98942"
-            },
-            "portfolio_name": {
-              "type": "string",
-              "example": "main"
-            },
-            "transactions": {
-              "type": "array",
-              "items": {
-                  "$ref": "#/definitions/transactionResponse"
-              },
-              "example": "[]"
-            },
-            "created_on": {
-              "type": "string",
-              "format": "date-time",
-              "example": "2021-07-08T09:33:30.751695"
-            },
-            "updated_on": {
-              "type": "string",
-              "format": "date-time",
-              "example": "2021-07-08T09:33:30.751695"
-            }
-          }
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "600ab5cf-4fa7-4e1f-9855-d4ca54981c85"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "af5ae0e3-b9fc-4e02-8d7c-0b5228348f0e"
+        },
+        "spot_price": {
+          "type": "number",
+          "format": "float",
+          "example": 22000.00
+        },
+        "purchase_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "coin_amount": {
+          "type": "number",
+          "format": "float",
+          "example": 0.33
+        },
+        "exchange": {
+          "type": "string",
+          "example": "Global"
+        },
+        "fiat": {
+          "type": "string",
+          "example": "USD"
+        },
+        "coin_id": {
+          "type": "number",
+          "example": 1
+        },
+        "portfolio_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "4cccb394-7c9f-4819-b6c7-5d363a6afc05"
+        },
+        "created_on": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2021-07-08T09:33:30.751695"
+        },
+        "updated_on": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2021-07-08T09:33:30.751695"
         }
       }
     }

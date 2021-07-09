@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from marshmallow import ValidationError
 from dotenv import load_dotenv
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from db import db
 from ma import ma
@@ -14,6 +15,20 @@ from resources.portfolio import Portfolio, UserPortfolioList
 from resources.transaction import Transaction, CreateTransaction
 
 app = Flask(__name__)
+
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Lighthouse Portfolio"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
+
 load_dotenv(".env", verbose=True)
 app.config.from_object("config")
 app.config.from_envvar("APPLICATION_SETTINGS")

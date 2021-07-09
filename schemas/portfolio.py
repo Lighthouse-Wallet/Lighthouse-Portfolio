@@ -1,6 +1,5 @@
 from ma import ma
 from models.portfolio import PortfolioModel
-from models.transaction import TransactionModel
 from schemas.transaction import TransactionSchema
 
 

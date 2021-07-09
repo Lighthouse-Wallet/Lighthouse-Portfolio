@@ -1,0 +1,274 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Lighthouse Portfolio API endpoint documentation",
+    "version": "1.0.0",
+    "title": "Lighthouse Portfolio",
+    "contact": {
+      "email": "tigran.dev@protonmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User Request",
+      "description": "API for registering and logging in anonymously."
+    },
+    {
+      "name": "Portfolio Request",
+      "description": "API for creating and fetching portfolios."
+    },
+    {
+      "name": "Transaction Request",
+      "description": "API for creating, updating, deleting and fetching transactions."
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "User Request"
+        ],
+        "summary": "Register user anonymously",
+        "requestBody": {
+          "description": "User request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/userResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "A user with that uuid already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to create user."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "User Request"
+        ],
+        "summary": "Login user anonymously",
+        "requestBody": {
+          "description": "User request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/userResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid credentials!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/{portfolio_name}": {
+    },
+    "/transaction-create": {
+      "post": {
+        "summary": "Create a transaction",
+        "tags": [
+          "Transaction Request"
+        ]
+      }
+    },
+    "/transaction/{transaction_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "transaction_id",
+          "required": true,
+          "description": "Transaction Request id",
+          "schema": {
+            "$ref": "#/components/schemas/transactionId"
+          }
+        }
+      ],
+      "put": {
+        "summary": "Edit a transaction by ID",
+        "tags": [
+          "Transaction Request"
+        ],
+        "requestBody": {
+          "description": "Book Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionRequestBody"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/transactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "userRequestBody": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "eb854f58-dfce-11eb-ba80-0242ac130004"
+          }
+        }
+      },
+      "portfolioRequestBody": {
+        "type": "object",
+        "properties": {
+        }
+      },
+      "transactionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "transactionRequestBody": {
+        "type": "object",
+        "properties": {
+          "purchase_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "coin_amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "spot_price": {
+            "type": "number",
+            "format": "float"
+          },
+          "exchange": {
+            "type": "string"
+          },
+          "fiat": {
+            "type": "string"
+          },
+          "coin_id": {
+            "type": "number"
+          },
+          "portfolio_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "userResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Account created successfully."
+        },
+        "access_token": {
+          "type": "string",
+          "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNjI1NzM2NTY3LCJqdGkiOiJmNjBlY2E0Yi1iMDBjLTQ2MzItOTEwMi1kMWY5N2NiMjJlNjgiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiYWJlZjg2NjgtMjk0NC00NjZiLTg3NTMtM2ZiNmUxNDViYmUyIiwibmJmIjoxNjI1NzM2NTY3LCJleHAiOjE2MjY2MDA1Njd9.wd3AOud6F3QW6auKl_JhoqAd0MJBbo9z3qo2C8hXs9w"
+        }
+      }
+    },
+    "transactionResponse": {
+    }
+  }
+}

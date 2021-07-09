@@ -1,4 +1,5 @@
 import traceback
+import uuid
 from datetime import datetime
 from flask_restful import Resource
 from flask import request
@@ -18,7 +19,7 @@ transaction_list_schema = TransactionSchema(many=True)
 class Transaction(Resource):
     @classmethod
     @jwt_required()
-    def get(cls, transaction_id: int) -> "TransactionModel":
+    def get(cls, transaction_id: uuid) -> "TransactionModel":
         user_id = get_jwt_identity()
         transaction = TransactionModel.find_by_filter(transaction_id, user_id)
         if not transaction:
@@ -27,7 +28,7 @@ class Transaction(Resource):
 
     @classmethod
     @jwt_required()
-    def put(cls, transaction_id: int):
+    def put(cls, transaction_id: uuid):
         user_id = get_jwt_identity()
         transaction_json = request.get_json()
         transaction = TransactionModel.find_by_filter(transaction_id, user_id)
@@ -39,6 +40,8 @@ class Transaction(Resource):
         transaction_json['purchase_date'] = new_date
         transaction_json['user_id'] = user_id
 
+        updated_date = str(datetime.now())
+        transaction_json['updated_on'] = updated_date
         try:
             transaction.update_to_db(transaction_json)
             updated_transaction = transaction_schema.dump(transaction)
@@ -49,7 +52,7 @@ class Transaction(Resource):
 
     @classmethod
     @jwt_required()
-    def delete(cls, transaction_id: int):
+    def delete(cls, transaction_id: uuid):
         user_id = get_jwt_identity()
         transaction = TransactionModel.find_by_filter(transaction_id, user_id)
 

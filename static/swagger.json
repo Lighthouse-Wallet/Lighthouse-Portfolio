@@ -1,0 +1,732 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Lighthouse Portfolio API endpoint documentation",
+    "version": "1.0.0",
+    "title": "Lighthouse Portfolio",
+    "contact": {
+      "email": "tigran.dev@protonmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User Request",
+      "description": "API for registering and logging in anonymously."
+    },
+    {
+      "name": "Portfolio Request",
+      "description": "API for creating and fetching portfolios."
+    },
+    {
+      "name": "Transaction Request",
+      "description": "API for creating, updating, deleting and fetching transactions."
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "User Request"
+        ],
+        "summary": "Register user anonymously",
+        "requestBody": {
+          "description": "User request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/userResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "A user with that uuid already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to create user."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "User Request"
+        ],
+        "summary": "Login user anonymously",
+        "requestBody": {
+          "description": "User request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/userResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid credentials!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/{portfolio_name}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "portfolio_name",
+          "required": true,
+          "description": "Portfolio name",
+          "schema": {
+            "type": "string",
+            "example": "main"
+          }
+        }
+      ],
+      "get": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "tags": [
+          "Portfolio Request"
+        ],
+        "summary": "Fetch portfolio and associated transactions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/getPortfolioResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Portfolio with name main not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "tags": [
+          "Portfolio Request"
+        ],
+        "summary": "Create a portfolio",
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/createPortfolioResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Portfolio with name 'main' already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to create portfolio."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction-create": {
+      "post": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Create a transaction",
+        "tags": [
+          "Transaction Request"
+        ],
+        "requestBody": {
+          "description": "Transaction request object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/createTransactionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction unauthorized. Failed to create transaction."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to create portfolio."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction/{transaction_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "transaction_id",
+          "required": true,
+          "description": "Transaction Request id",
+          "schema": {
+            "$ref": "#/components/schemas/transactionId"
+          }
+        }
+      ],
+      "put": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Edit a transaction by ID",
+        "tags": [
+          "Transaction Request"
+        ],
+        "requestBody": {
+          "description": "Book Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/transactionRequestBody"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/updateTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to update transaction."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Get a transaction by ID",
+        "tags": [
+          "Transaction Request"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transaction": {
+                      "$ref": "#/definitions/getTransactionResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Delete a transaction by ID",
+        "tags": [
+          "Transaction Request"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' deleted."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "userRequestBody": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "eb854f58-dfce-11eb-ba80-0242ac130004"
+          }
+        }
+      },
+      "portfolioRequestBody": {
+        "type": "object",
+        "properties": {
+        }
+      },
+      "transactionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "transactionRequestBody": {
+        "type": "object",
+        "properties": {
+          "purchase_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": 1625488612933
+          },
+          "coin_amount": {
+            "type": "number",
+            "format": "float",
+            "example": 0.33
+          },
+          "spot_price": {
+            "type": "number",
+            "format": "float",
+            "example": 22000.00
+          },
+          "exchange": {
+            "type": "string",
+            "example": "Global"
+          },
+          "fiat": {
+            "type": "string",
+            "example": "USD"
+          },
+          "coin_id": {
+            "type": "number",
+            "example": 1
+          },
+          "portfolio_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "4cccb394-7c9f-4819-b6c7-5d363a6afc05"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "userResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Account created successfully."
+        },
+        "access_token": {
+          "type": "string",
+          "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNjI1NzM2NTY3LCJqdGkiOiJmNjBlY2E0Yi1iMDBjLTQ2MzItOTEwMi1kMWY5N2NiMjJlNjgiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoiYWJlZjg2NjgtMjk0NC00NjZiLTg3NTMtM2ZiNmUxNDViYmUyIiwibmJmIjoxNjI1NzM2NTY3LCJleHAiOjE2MjY2MDA1Njd9.wd3AOud6F3QW6auKl_JhoqAd0MJBbo9z3qo2C8hXs9w"
+        }
+      }
+    },
+    "createPortfolioResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Portfolio with name main created."
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "abef8668-2944-466b-8753-3fb6e145bbe2"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "220fe614-3938-43a7-a524-9db709b98942"
+            },
+            "portfolio_name": {
+              "type": "string",
+              "example": "main"
+            },
+            "transactions": {
+              "type": "array",
+              "items": {},
+              "example": "[]"
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            },
+            "updated_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            }
+          }
+        }
+      }
+    },
+    "createTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Transaction created."
+        },
+        "data": {
+          "$ref": "#/definitions/getTransactionResponse"
+        }
+      }
+    },
+    "updateTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Transaction updated."
+        },
+        "data": {
+          "$ref": "#/definitions/getTransactionResponse"
+        }
+      }
+    },
+    "getPortfolioResponse": {
+      "type": "object",
+      "properties": {
+        "portfolio": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "abef8668-2944-466b-8753-3fb6e145bbe2"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "220fe614-3938-43a7-a524-9db709b98942"
+            },
+            "portfolio_name": {
+              "type": "string",
+              "example": "main"
+            },
+            "transactions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/getTransactionResponse"
+              }
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            },
+            "updated_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            }
+          }
+        }
+      }
+    },
+    "getTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "600ab5cf-4fa7-4e1f-9855-d4ca54981c85"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "af5ae0e3-b9fc-4e02-8d7c-0b5228348f0e"
+        },
+        "spot_price": {
+          "type": "number",
+          "format": "float",
+          "example": 22000.00
+        },
+        "purchase_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "coin_amount": {
+          "type": "number",
+          "format": "float",
+          "example": 0.33
+        },
+        "exchange": {
+          "type": "string",
+          "example": "Global"
+        },
+        "fiat": {
+          "type": "string",
+          "example": "USD"
+        },
+        "coin_id": {
+          "type": "number",
+          "example": 1
+        },
+        "portfolio_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "4cccb394-7c9f-4819-b6c7-5d363a6afc05"
+        },
+        "created_on": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2021-07-08T09:33:30.751695"
+        },
+        "updated_on": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2021-07-08T09:33:30.751695"
+        }
+      }
+    }
+  }
+}

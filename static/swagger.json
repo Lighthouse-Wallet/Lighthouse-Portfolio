@@ -211,7 +211,7 @@
               }
             }
           },
-          "403": {
+          "400": {
             "description": "Bad request",
             "content": {
               "application/json": {
@@ -220,7 +220,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Transaction unauthorized. Failed to create transaction."
+                      "example": "Portfolio with name 'main' already exists."
                     }
                   }
                 }
@@ -236,7 +236,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Internal server error. Failed to create transaction."
+                      "example": "Internal server error. Failed to create portfolio."
                     }
                   }
                 }
@@ -272,12 +272,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/createPortfolioResponse"
+                  "$ref": "#/definitions/createTransactionResponse"
                 }
               }
             }
           },
-          "400": {
+          "403": {
             "description": "Bad request",
             "content": {
               "application/json": {
@@ -286,7 +286,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Portfolio with name main already exists."
+                      "example": "Transaction unauthorized. Failed to create transaction."
                     }
                   }
                 }
@@ -352,13 +352,133 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/transactionResponse"
+                  "$ref": "#/definitions/updateTransactionResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Failed. Bad post data."
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to update transaction."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Get a transaction by ID",
+        "tags": [
+          "Transaction Request"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transaction": {
+                      "$ref": "#/definitions/getTransactionResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": {
+          "$ref": "#/components/securitySchemes/bearerAuth"
+        },
+        "summary": "Delete a transaction by ID",
+        "tags": [
+          "Transaction Request"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' deleted."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction with id '{}' not found."
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -494,6 +614,18 @@
         "message": {
           "type": "string",
           "example": "Transaction created."
+        },
+        "data": {
+          "$ref": "#/definitions/getTransactionResponse"
+        }
+      }
+    },
+    "updateTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Transaction updated."
         },
         "data": {
           "$ref": "#/definitions/getTransactionResponse"

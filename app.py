@@ -58,7 +58,7 @@ api.add_resource(UserLogin, "/api/v1/login")
 # api.add_resource(UserPortfolioList, "/api/v1/portfolio/<int:user_id>")
 api.add_resource(Portfolio, "/api/v1/portfolio/<string:portfolio_name>")
 api.add_resource(CreateTransaction, "/api/v1/transaction-create")
-api.add_resource(Transaction, "/api/v1/transaction/<int:transaction_id>")
+api.add_resource(Transaction, "/api/v1/transaction/<uuid:transaction_id>")
 
 db.init_app(app)
 if __name__ == "__main__":

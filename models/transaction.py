@@ -22,7 +22,7 @@ class TransactionModel(db.Model):
     user = db.relationship("UserModel")
 
     @classmethod
-    def find_by_filter(cls, _id: int, user_id: int) -> "TransactionModel":
+    def find_by_filter(cls, _id: uuid, user_id: uuid) -> "TransactionModel":
         return cls.query.filter_by(id=_id, user_id=user_id).first()
 
     def save_to_db(self) -> None:
@@ -34,7 +34,7 @@ class TransactionModel(db.Model):
             setattr(self, k, v)
         db.session.commit()
 
-    def delete_from_db(self, _id: int) -> None:
+    def delete_from_db(self, _id: uuid) -> None:
         db.session.delete(self)
         db.session.commit()
 

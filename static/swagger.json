@@ -143,6 +143,102 @@
       }
     },
     "/portfolio/{portfolio_name}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "portfolio_name",
+          "required": true,
+          "description": "Portfolio name",
+          "schema": {
+            "type": "string",
+            "example": "main"
+          }
+        }
+      ],
+      "get": {
+         "tags": [
+          "Portfolio Request"
+        ],
+        "summary": "Fetch portfolio and associated transactions",
+         "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/portfolioResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Portfolio with name main not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Portfolio Request"
+        ],
+        "summary": "Create a portfolio",
+         "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/portfolioResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Portfolio with name main already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error. Failed to create portfolio."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/transaction-create": {
       "post": {
@@ -268,7 +364,131 @@
         }
       }
     },
-    "transactionResponse": {
+    "portfolioResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Portfolio with name main created."
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "abef8668-2944-466b-8753-3fb6e145bbe2"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "220fe614-3938-43a7-a524-9db709b98942"
+            },
+            "portfolio_name": {
+              "type": "string",
+              "example": "main"
+            },
+            "transactions": {
+              "type": "array",
+              "items": {},
+              "example": "[]"
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            },
+            "updated_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            }
+          }
+        }
+
+      }
+    },
+    "getPortfolioResponse": {
+      "type": "object",
+      "properties": {
+        "portfolio": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "abef8668-2944-466b-8753-3fb6e145bbe2"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "220fe614-3938-43a7-a524-9db709b98942"
+            },
+            "portfolio_name": {
+              "type": "string",
+              "example": "main"
+            },
+            "transactions": {
+              "type": "array",
+              "items": {
+                  "$ref": "#/definitions/transactionResponse"
+              },
+              "example": "[]"
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            },
+            "updated_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            }
+          }
+        }
+      }
+    },
+    "getTransactionResponse": {
+       "type": "object",
+      "properties": {
+        "portfolio": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "abef8668-2944-466b-8753-3fb6e145bbe2"
+            },
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "example": "220fe614-3938-43a7-a524-9db709b98942"
+            },
+            "portfolio_name": {
+              "type": "string",
+              "example": "main"
+            },
+            "transactions": {
+              "type": "array",
+              "items": {
+                  "$ref": "#/definitions/transactionResponse"
+              },
+              "example": "[]"
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            },
+            "updated_on": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2021-07-08T09:33:30.751695"
+            }
+          }
+        }
+      }
     }
   }
 }

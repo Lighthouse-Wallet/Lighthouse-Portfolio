@@ -40,6 +40,8 @@ class Transaction(Resource):
         transaction_json['purchase_date'] = new_date
         transaction_json['user_id'] = user_id
 
+        updated_date = str(datetime.now())
+        transaction_json['updated_on'] = updated_date
         try:
             transaction.update_to_db(transaction_json)
             updated_transaction = transaction_schema.dump(transaction)

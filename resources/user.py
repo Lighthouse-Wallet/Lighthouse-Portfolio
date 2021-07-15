@@ -37,7 +37,7 @@ class UserLogin(Resource):
     def post(cls):
         user_json = request.get_json()
         user_data = user_schema.load(user_json)
-        user = UserModel.find_by_uuid(user_data.uuid)
+        user = UserModel.find_by_device_id(user_data.device_id)
 
         if user:
             access_token = create_access_token(user.id, fresh=True)

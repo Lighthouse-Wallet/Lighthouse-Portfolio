@@ -19,6 +19,8 @@ requests = "*"
 black = "*"
 psycopg2-binary = "*"
 sqlalchemy = "*"
+flask_swagger_ui = "*"
+flask_cors = "*"
 
 [requires]
 python_version = "3.8"

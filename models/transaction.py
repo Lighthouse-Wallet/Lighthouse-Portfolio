@@ -13,6 +13,7 @@ class TransactionModel(db.Model):
     fiat = db.Column(db.String(40), nullable=False)
     coin_id = db.Column(db.Integer, nullable=False)
     is_buy = db.Column(db.Boolean, nullable=False)
+    price_type = db.Column(db.Integer, nullable=False)
     portfolio_id = db.Column(UUID(as_uuid=True), db.ForeignKey("portfolios.id"), nullable=False)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("users.id"), nullable=False)
 

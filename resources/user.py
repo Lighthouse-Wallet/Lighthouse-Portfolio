@@ -38,12 +38,13 @@ class UserLogin(Resource):
         user_json = request.get_json()
         user_data = user_schema.load(user_json)
         user = UserModel.find_by_device_id(user_data.device_id)
+        print("HERE 4", user)
 
         if user:
             access_token = create_access_token(user.id, fresh=True)
             return {"access_token": access_token}, 200
-
-        return {"message", gettext("user_invalid_credentials")}, 401
+        # print("HERE 5", gettext("user_invalid_credentials"))
+        return {"message", "bad"}, 401
 
 
 class UserLogout(Resource):

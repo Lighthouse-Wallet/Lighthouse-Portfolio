@@ -1,8 +1,6 @@
 import traceback
 from flask_restful import Resource
-from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from typing import List
 from schemas.portfolio import PortfolioSchema
 from models.portfolio import PortfolioModel
 from models.user import UserModel

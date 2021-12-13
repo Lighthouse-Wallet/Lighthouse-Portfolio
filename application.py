@@ -15,7 +15,7 @@ from resources.user import UserRegister, UserLogin
 from resources.portfolio import Portfolio, UserPortfolioList
 from resources.transaction import Transaction, CreateTransaction
 
-app = Flask(__name__)
+application = app = Flask(__name__)
 CORS(app)
 
 ### swagger specific ###

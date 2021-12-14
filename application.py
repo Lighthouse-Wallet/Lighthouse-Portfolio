@@ -16,7 +16,7 @@ from resources.portfolio import Portfolio, UserPortfolioList
 from resources.transaction import Transaction, CreateTransaction
 
 application = app = Flask(__name__)
-CORS(app)
+CORS(application)
 
 ### swagger specific ###
 SWAGGER_URL = '/'

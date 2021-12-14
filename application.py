@@ -19,7 +19,7 @@ application = app = Flask(__name__)
 CORS(app)
 
 ### swagger specific ###
-SWAGGER_URL = '/swagger'
+SWAGGER_URL = '/'
 API_URL = '/static/swagger.json'
 SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     SWAGGER_URL,

@@ -16,7 +16,6 @@ from resources.portfolio import Portfolio, UserPortfolioList
 from resources.transaction import Transaction, CreateTransaction
 
 application = app = Flask(__name__)
-CORS(application)
 
 ### swagger specific ###
 SWAGGER_URL = '/'
@@ -30,6 +29,7 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
+CORS(application)
 
 load_dotenv(".env", verbose=True)
 app.config.from_object("config")
